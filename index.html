@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+	<meta charset='utf-8' />
+	<title>Scotland Map</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+	<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Questrial&display=swap" rel="stylesheet">
+	<style>
+
+		body { margin:0; padding:0; }
+		#map { position:absolute; top:0; bottom:0; width:100%; }
+	</style>
+</head>
+<body>
+
+<style>
+	/** * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/) * http://cssreset.com */
+	html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,time, mark, audio, video {	
+	margin: 0;	
+	padding: 0;	
+	border: 0;	
+	font-size: 100%;	
+	font: inherit;	
+	vertical-align: baseline;}
+	
+	/* HTML5 display-role reset for older browsers */
+	article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {	
+	display: block;}
+	
+	body {	
+	line-height: 1.5;
+	}
+	
+	ol, ul {	
+	list-style: none;
+	}
+	
+	blockquote, q {	
+	quotes: none;
+	}
+	
+	blockquote:before, blockquote:after,q:before, q:after {	
+	content: '';	
+	content: none;
+	}
+	
+	table {	
+	border-collapse: collapse;	border-spacing: 0;
+	}	 
+	
+	/* end reset*/
+	#map {
+		position: fixed;
+		width: 50%;
+	}
+	#features {
+		width: 50%;
+		margin-left: 50%;
+		font-family: sans-serif;
+		overflow-y: scroll;
+		background-color: #fafafa;
+	}
+	section {
+		padding: 25px 50px;
+		line-height: 25px;
+		border-bottom: 1px solid #ddd;
+		opacity: 0.25;
+		font-size: 13px;
+	}
+	section.active {
+		opacity: 1;
+	}
+	section:last-child {
+		border-bottom: none;
+		margin-bottom: 200px;
+	}
+	img {
+		width: 200px;
+		padding: 5px;
+	}
+	h2 {
+		font-size: 2em;
+		padding: 6px 2px;
+		font-family: 'Questrial', sans-serif;
+	}
+	h4 {
+		font-family: 'Open Sans', sans-serif;
+	}
+	p {
+		font-family: 'Open Sans', sans-serif;
+		font-style: italic;
+	}
+	img {
+		width: 450px;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+
+	}
+    @media only screen and (min-width: 500px) and (max-width: 700px) {
+   		img {
+			width: 250px;
+			padding: 5px;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+
+		}
+    }
+	@media only screen and (min-width: 701px) {
+		img {
+			width: 400px;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		p {
+			text-align: center;
+		}
+	}
+
+</style>
+
+<div id='map'></div>
+<div id='features'>
+	<section id='overview' class='active'>
+		<h2>My Scottish Highland Trip</h2>
+		<h4>In July 2018, my parents and I spent two weeks traveling through the Scottish Highlands. We started and ended in Glasgow and followed the coast up and down the edges of Scotland. I picked a few points scattered across the country to show for my map.</h4>
+	</section>
+	<section id='glasgow'>
+		<h2>Glasgow</h2>
+		<h4>All of the locations I've chosen aren't completely random, they're places that I remember from my trip. This spot is in front of the Gallery of Modern Art because of the statue in front of it. This statue actually always looks like it does below and the cones are always being taken down by polic and being put back up by anyone in Glasgow with a few spare cones at their house.</h4>
+		<img src="img/gg1.jpeg">
+		<p>Wellington Monument, known for always having a cone or two.</p>
+		<img src="img/gg2.jpeg">
+		<p>Doune Castle, known as a medieval stronghold in 1420 and Camelot in Monty Python and the Holy Grail. The castle is actually in Doune Village, northeast of Glasgow.</p>
+		<img src="img/gg3.jpeg">
+		<p>The Kelpies are the largest equine statues in the world, located in Falkirk, northeast of Glasgow.</p>
+	</section>
+	<section id='edinburgh'>
+		<h2>Edinburgh</h2>
+		<h4>This was my second time in Edinburgh but I enjoyed it more than the first. We spent longer here and got to enjoy the city a bit more. The photo below is of me and my dad in front of the city at the edge of the castle along with some other photos.</h4>
+		<img src="img/ed1.jpg">
+		<p>My dad and I above Edinburgh at the city's castle while being blinded by the sun.</p>
+		<img src="img/ed2.jpeg">
+		<p>The view from the castle.</p>
+		<img src="img/ed3.jpeg">
+		<p>Rosslyn Chapel, made famous in Da Vinci Code.</p>
+	</section>
+	<section id='lochness'>
+		<h2>Loch Ness and Urquhart Castle</h2>
+		<h4>Visiting Loch Ness has been a dream of mine since I was little and I was so excited to be able to cross this off my list of things to see. The photos below are more pictures I took along with a Snapchat I got from my friend who drew in Nessie.</h4>
+		<img src="img/ln1.jpeg">
+		<p>Here's that Snapchat picture of Nessie I mentioned.</p>
+		<img src="img/ln2.jpeg">
+		<p>An actual picture of the southern end of Loch Ness.</p>
+		<img src="img/ln3.jpeg">
+		<p>The same view of the loch from Urquhart Castle.</p>
+	</section>
+	<section id='orkneys'>
+		<h2>The Orkneys</h2>
+		<h4>We spent a day on our trip traveling to the Orkney Islands. We set off from John O'Groats and visited a brewery, Skara Brae, and saw Hungarian Wooly Pigs.</h4>
+		<img src="img/or1.jpeg">
+		<p>The famous John O'Groats sign with different world locations and lots of stickers.</p>
+		<img src="img/or2.jpeg">
+		<p>The Ring of Brodgar, aka Orkneys' Stonehenge.</p>
+		<img src="img/or3.jpeg">
+		<p>Skara Brae, a 5,000 year old Neolithic Village.</p>
+		<img src="img/or4.jpeg">
+		<p>Hungarian Wooly Pig!</p>
+	</section>
+	<section id='skye'>
+		<h2>Isle of Skye</h2>
+		<h4>Skye is known for being one of the most beautiful places in the world. The only issue was how foggy it was, restricting us from seeing its famous rock formation. But we did get to see our first Highland Cows.</h4>
+		<img src="img/sk1.jpeg">
+		<p>The main city of Portree.</p>
+		<img src="img/sk2.jpeg">
+		<p>A taste of some Isle of Skye scenery.</p>
+		<img src="img/sk3.jpeg">
+		<p>Scottish Highland cow, known locally as 'Heelin Coos'.</p>
+	</section>
+</div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYmF5bGVpZ2hwYXJzb25zIiwiYSI6ImNrMG9lb3BldTAxaGEzY250ZGt6dXoxMG8ifQ.ezkL5okVBIrz1-OlF1ZlNA';
+
+var map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g', // the outdoors-v10 style but without Hillshade layers
+	center: [-4.422502, 57.334381],
+	zoom: 6,
+	bearing: 0,
+	pitch: 0
+});
+
+var chapters = {
+	'overview': {
+		bearing: 0,
+		center: [-4.422502, 57.334381],
+		zoom: 6,
+		speed: 0.6,
+		pitch: 0
+	},
+	'glasgow': {
+		bearing: 27,
+		center: [-4.251953, 55.860078],
+		zoom: 15.5,
+		speed: 0.6,
+		pitch: 0
+	},
+	'edinburgh': {
+		duration: 6000,
+		center: [-3.199910, 55.948633],
+		bearing: 150,
+		zoom: 15,
+		speed: 0.6,
+		pitch: 0
+	},
+	'lochness': {
+		bearing: 90,
+		center: [-4.442004, 57.324221],
+		zoom: 13,
+		speed: 0.6,
+		pitch: 0
+	},
+	'orkneys': {
+		bearing: 90,
+		center: [-3.341668, 59.048738],
+		zoom: 13,
+		speed: 0.6,
+		pitch: 0
+	},
+	'skye': {
+		bearing: 45,
+		center: [-6.189646, 57.412985],
+		zoom: 15.3,
+		pitch: 0,
+		speed: 0.6
+	}
+};
+
+// On every scroll event, check which element is on screen
+window.onscroll = function() {
+	var chapterNames = Object.keys(chapters);
+	for (var i = 0; i < chapterNames.length; i++) {
+		var chapterName = chapterNames[i];
+		if (isElementOnScreen(chapterName)) {
+			setActiveChapter(chapterName);
+			break;
+		}
+	}
+};
+
+var activeChapterName = 'overview';
+function setActiveChapter(chapterName) {
+	if (chapterName === activeChapterName) return;
+ 
+	map.flyTo(chapters[chapterName]);
+ 
+	document.getElementById(chapterName).setAttribute('class', 'active');
+	document.getElementById(activeChapterName).setAttribute('class', '');
+ 
+	activeChapterName = chapterName;
+}
+ 
+function isElementOnScreen(id) {
+	var element = document.getElementById(id);
+	var bounds = element.getBoundingClientRect();
+	return bounds.top < window.innerHeight && bounds.bottom > 0;
+}
+	 
+	map.on('load', function () {
+		map.addSource('dem', {
+			"type": "raster-dem",
+			"url": "mapbox://mapbox.terrain-rgb"
+	});
+	map.addLayer({
+			"id": "hillshading",
+			"source": "dem",
+			"type": "hillshade"
+		// insert below waterway-river-canal-shadow;
+		// where hillshading sits in the Mapbox Outdoors style
+		}, 'waterway-river-canal-shadow');
+
+	 
+	map.addLayer({
+		"id": "points",
+		"type": "symbol",
+		"source": {
+			"type": "geojson",
+			"data": {
+				"type": "FeatureCollection",
+				"features": [{
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [-4.251953, 55.860078]
+					},
+					"properties": {
+						"title": "Glasgow"
+					}
+				}, {
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [-3.199910, 55.948633]
+					},
+					"properties": {
+						"title": "Edinburgh"
+					}
+				}, {
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [-4.442004, 57.324221]
+					},
+					"properties": {
+						"title": "Loch Ness and Urquhart Castle"
+					}
+				}, {
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [-3.341668, 59.048738]
+					},
+					"properties": {
+						"title": "The Orkneys"
+					}
+				},  {
+					"type": "Feature",
+					"geometry": {
+						"type": "Point",
+						"coordinates": [-6.189646, 57.412985]
+					},
+					"properties": {
+						"title": "Isle of Skye"
+					}
+				}]
+			}
+		},
+		"layout": {
+			"icon-image": "{icon}-15",
+			"text-field": "{title}",
+			"text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+			"text-offset": [0, 0.6],
+			"text-anchor": "top"
+		}
+	});
+
+	/*map.on('load', function() {
+		map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+			if (error) throw error;
+			map.addImage('cat', image);
+			map.addLayer({
+				"id": "points",
+				"type": "symbol",
+				"source": {
+					"type": "geojson",
+					"data": {
+						"type": "FeatureCollection",
+						"features": [{
+							"type": "Feature",
+							"geometry": {
+								"type": "Point",
+								"coordinates": [-4.251953, 55.860078]
+							}
+						}]
+					}
+				},
+				"layout": {
+					"icon-image": "cat",
+					"icon-size": 0.25
+				}
+			});
+		});
+});*/
+	map.addLayer({
+		"id": "route",
+		"type": "line",
+		"source": {
+			"type": "geojson",
+			"data": {
+				"type": "Feature",
+				"properties": {},
+				"geometry": {
+					"type": "LineString",
+					"coordinates": [
+					[-4.251953, 55.860078],
+					[-3.199910, 55.948633],
+					[-4.442004, 57.324221],
+					[-3.341668, 59.048738],
+					[-6.189646, 57.412985]
+				]
+			}
+		}
+	},
+	"layout": {
+		"line-join": "round",
+		"line-cap": "round"
+		},
+	"paint": {
+		"line-color": "#888",
+		"line-width": 4
+		}
+	});
+});
+
+</script>
+ 
+</body>
+</html>
